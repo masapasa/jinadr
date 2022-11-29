@@ -1,13 +1,11 @@
 import argparse
 import os
-
-from docarray import DocumentArray
 from docarray.document.generators import from_csv
-
+from docarray import DocumentArray
+from jina import Flow, DocumentArray, requests
 from backend_config import papers_data_path, papers_data_url
-from flows import index_flow, search_flow
 from helpers import download_csv, log, maximise_csv_field_size_limit
-
+flow = Flow.load_config("flow.yml")
 
 # boolean args:
 # https://stackoverflow.com/questions/15008758/parsing-boolean-values-with-argparse/36031646
@@ -65,7 +63,7 @@ def index(n):
     log(f"Loaded {len(papers)} papers from {papers_data_path}.")
 
     log("Building index...")
-    indexer = index_flow()
+    indexer = flow()
     with indexer:
         indexer.index(papers, request_size=32)
 
@@ -76,7 +74,7 @@ if args.index:
     index(args.n)
 
 # running the search/finetuning flow as a service
-flow = search_flow()
+flow = flow()
 flow.expose_endpoint("/finetune", summary="Finetune documents.", tags=["Finetuning"])
 
 with flow:
