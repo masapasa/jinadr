@@ -1,3 +1,6 @@
+from pydoc import doc
+from urllib import request
+from docarray import DocumentArray, Document
 from jina import Flow
 
 from executors import SpecterExecutor
@@ -17,8 +20,6 @@ def index_flow():
     )
 
     return flow
-
-
 def search_flow():
     flow = (
         Flow(port_expose=search_port, protocol="http")

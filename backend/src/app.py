@@ -1,6 +1,5 @@
-from jina.types.document.generators import from_csv
 from jina import DocumentArray
-
+from docarray.document.generators import from_csv
 from flows import search_flow, index_flow
 from backend_config import papers_data_path, papers_data_url, top_k
 from helpers import download_csv, log

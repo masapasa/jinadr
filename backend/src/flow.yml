@@ -1,0 +1,24 @@
+jtype: Flow
+with:
+  protocol: grpc
+executors:
+  - name: encoder
+    uses: 'jinahub://TransformerTorchEncoder'
+    pretrained_model_name_or_path: 'bert-base-uncased'
+    volumes: '.cache/huggingface:/root/.cache/huggingface'  
+    resources:
+      memory: 8G
+  - name: indexer
+    uses: jinahub://AnnLiteIndexer/0.3.0
+    install-requirements: True
+    uses_with:
+      dim: 300
+      columns:
+        - ['title', 'str']
+        - ['abstract', 'int']
+    uses_metas:
+      workspace: workspace
+    jcloud:
+      capacity: on-demand
+    resources:
+      memory: 8G
